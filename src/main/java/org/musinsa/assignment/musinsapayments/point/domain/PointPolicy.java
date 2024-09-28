@@ -7,16 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
 @Entity
 @Table(name = "point_policy")
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PointPolicy {
 
@@ -36,5 +32,26 @@ public class PointPolicy {
 
     @Column(name = "max_earn_point", nullable = false)
     private Long maxEarnPoint;
+
+    public PointPolicy(Long userId, Long limitPoint) {
+        this.userId = userId;
+        this.limitPoint = limitPoint == null ? 1000000L : limitPoint;
+        this.minEarnPoint = 1L;
+        this.maxEarnPoint = 100000L;
+    }
+
+    public PointPolicy(Long userId) {
+        this.userId = userId;
+        this.limitPoint = 1000000L;
+        this.minEarnPoint = 1L;
+        this.maxEarnPoint = 100000L;
+    }
+
+    public PointPolicy(Long userId, Long limitPoint, Long minEarnPoint, Long maxEarnPoint) {
+        this.userId = userId;
+        this.limitPoint = limitPoint == null ? 1000000L : limitPoint;
+        this.minEarnPoint = minEarnPoint == null ? 1L : minEarnPoint;
+        this.maxEarnPoint = maxEarnPoint == null ? 100000L : maxEarnPoint;
+    }
 
 }

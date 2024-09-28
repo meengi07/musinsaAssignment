@@ -8,17 +8,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.musinsa.assignment.musinsapayments.commons.model.BaseEntity;
 
 @Getter
 @Entity
-@Builder
 @Table(name = "point")
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Point extends BaseEntity {
     @Id
@@ -41,8 +37,29 @@ public class Point extends BaseEntity {
     @Column(name = "remain_amount", nullable = false)
     private Long remainAmount;
 
-    public void decreaseAmount(Long amount) {
+    public void decreaseRemainAmount(Long amount) {
         this.remainAmount -= amount;
     }
+
+    public void increaseRemainAmount(Long amount) {
+        this.remainAmount += amount;
+    }
+
+    public Point(Long userId, Long amount, LocalDate expireDate, boolean isManually) {
+        this.userId = userId;
+        this.amount = amount;
+        this.expireDate = expireDate == null ? LocalDate.now().plusDays(30) : expireDate;
+        this.isManually = isManually;
+        this.remainAmount = amount;
+    }
+
+    public Point(Long userId, Long amount, boolean isManually) {
+        this.userId = userId;
+        this.amount = amount;
+        this.expireDate = LocalDate.now().plusDays(30);
+        this.isManually = isManually;
+        this.remainAmount = amount;
+    }
+
 
 }

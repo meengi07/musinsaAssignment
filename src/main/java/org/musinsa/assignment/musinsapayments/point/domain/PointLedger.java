@@ -9,17 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.musinsa.assignment.musinsapayments.commons.model.BaseEntity;
 
 @Getter
 @Entity
-@Builder
 @Table(name = "point_ledger")
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PointLedger extends BaseEntity {
 
@@ -43,5 +39,20 @@ public class PointLedger extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "point_type", nullable = false)
     private PointType pointType;
+
+    public PointLedger(Long userId, Long pointId, Long orderId, Long amount, PointType pointType) {
+        this.userId = userId;
+        this.pointId = pointId;
+        this.orderId = orderId;
+        this.amount = amount;
+        this.pointType = pointType;
+    }
+
+    public PointLedger(Long userId, Long pointId,Long amount, PointType pointType) {
+        this.userId = userId;
+        this.pointId = pointId;
+        this.amount = amount;
+        this.pointType = pointType;
+    }
 
 }

@@ -7,17 +7,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.musinsa.assignment.musinsapayments.commons.model.BaseEntity;
 
 @Getter
 @Entity
-@Builder
 @Table(name = "point_balance")
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PointBalance extends BaseEntity {
 
@@ -35,4 +31,19 @@ public class PointBalance extends BaseEntity {
     public void increaseAmount(Long amount) {
         this.totalAmount += amount;
     }
+
+    public void decreaseAmount(Long amount) {
+        this.totalAmount -= amount;
+    }
+
+    public PointBalance(Long userId, Long totalAmount) {
+        this.userId = userId;
+        this.totalAmount = totalAmount;
+    }
+
+    public PointBalance(Long userId) {
+        this.userId = userId;
+        this.totalAmount = 0L;
+    }
+
 }
