@@ -18,7 +18,7 @@ public class PointPolicy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "point_policy_id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "user_id", nullable = false)
@@ -32,13 +32,6 @@ public class PointPolicy {
 
     @Column(name = "max_earn_point", nullable = false)
     private Long maxEarnPoint;
-
-    public PointPolicy(Long userId, Long limitPoint) {
-        this.userId = userId;
-        this.limitPoint = limitPoint == null ? 1000000L : limitPoint;
-        this.minEarnPoint = 1L;
-        this.maxEarnPoint = 100000L;
-    }
 
     public PointPolicy(Long userId) {
         this.userId = userId;

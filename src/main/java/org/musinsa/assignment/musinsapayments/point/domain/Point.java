@@ -19,7 +19,7 @@ import org.musinsa.assignment.musinsapayments.commons.model.BaseEntity;
 public class Point extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "point_id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "user_id", nullable = false)

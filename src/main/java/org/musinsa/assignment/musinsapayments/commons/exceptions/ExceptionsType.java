@@ -13,8 +13,7 @@ public enum ExceptionsType {
     POINT_NOT_FOUND(400, "포인트를 찾을 수 없습니다."),
     POINT_LEDGER_NOT_FOUND(400, "포인트 내역을 찾을 수 없습니다."),
     INVALID_PARAMETER(400, "잘못된 파라미터가 전달되었습니다."),
-    SERVER_ERROR(500, "서버에 문제가 발생하였습니다."),
-    NULL_POINTER(500, "NULL 오류가 발생하였습니다.");
+    SERVER_ERROR(500, "서버에 문제가 발생하였습니다.");
 
     private final int status;
     private final String message;

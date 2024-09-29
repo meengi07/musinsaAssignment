@@ -27,14 +27,6 @@ public class GlobalExceptionHandler {
             .body(ExceptionResponse.of(e.getErrorType()));
     }
 
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<ExceptionResponse> handleNullPointerException(NullPointerException e) {
-        log.error("Null 오류 발생 : {}", e.getMessage());
-        return ResponseEntity
-            .status(500)
-            .body(ExceptionResponse.of(ExceptionsType.NULL_POINTER));
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         String errorMessage = e.getBindingResult()
