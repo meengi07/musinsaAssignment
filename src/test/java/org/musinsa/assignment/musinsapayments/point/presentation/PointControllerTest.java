@@ -1,6 +1,5 @@
 package org.musinsa.assignment.musinsapayments.point.presentation;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,7 +44,7 @@ class PointControllerTest {
 
     @Test
     void 포인트_적립_취소_전역_테스트() throws Exception {
-        mockMvc.perform(delete("/api/point/earn/1"))
+        mockMvc.perform(post("/api/point/earn/1/cancel"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.pointId").isNumber())
             .andExpect(jsonPath("$.remainPoint").isNumber());
@@ -64,7 +63,7 @@ class PointControllerTest {
     void 포인트_사용_취소_전역_테스트() throws Exception {
         pointService.usePoint(1L, 1L, 100L);
 
-        mockMvc.perform(delete("/api/point/use")
+        mockMvc.perform(post("/api/point/use/cancel")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"userId\":1,\"orderId\":1,\"amount\":100}"))
             .andExpect(status().isOk())

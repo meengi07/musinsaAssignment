@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.musinsa.assignment.musinsapayments.point.application.PointFacade;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +26,7 @@ public class PointController implements PointControllerDoc {
         return ResponseEntity.ok(pointEarnResponse);
     }
 
-    @DeleteMapping("/earn/{pointId}")
+    @PostMapping("/earn/{pointId}/cancel")
     public ResponseEntity<PointEarnResponse> cancelPoint(@PathVariable Long pointId) {
         log.info("포인트 적립 취소, pointId: {}", pointId);
         PointEarnResponse pointEarnResponse = pointFacade.cancelPoint(pointId);
@@ -43,7 +42,7 @@ public class PointController implements PointControllerDoc {
         return ResponseEntity.ok(pointUseResponse);
     }
 
-    @DeleteMapping("/use")
+    @PostMapping("/use/cancel")
     public ResponseEntity<PointUseResponse> cancelUsedPoint(@RequestBody PointUseRequest useRequest) {
         log.info("포인트 사용 취소 : {}", useRequest);
         PointUseResponse pointUseResponse = pointFacade.cancelUsedPoint(useRequest);
