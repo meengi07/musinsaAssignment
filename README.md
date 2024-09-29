@@ -96,8 +96,8 @@ java -jar build/libs/musinsaAssignment-0.0.1-SNAPSHOT.jar
 
 ## 4. 데이터베이스 스키마
 - ERD 다이어그램
-![image](/point-diagram-db.png)
+![image](https://github.com/meengi07/musinsaAssignment/blob/main/src/main/resources/point-diagram-db.png)
 
 ## 5. AWS 환경을 가정한 아키텍처 구성
 - AWS 환경을 가정한 아키텍처 구성도
-  ![image](/point-diagram-aws.png)
+  ![image](https://github.com/meengi07/musinsaAssignment/blob/main/src/main/resources/point-diagram-aws.png)
