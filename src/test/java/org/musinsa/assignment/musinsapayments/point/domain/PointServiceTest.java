@@ -1,27 +1,32 @@
 package org.musinsa.assignment.musinsapayments.point.domain;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Field;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.musinsa.assignment.musinsapayments.commons.exceptions.ExceptionsType;
 import org.musinsa.assignment.musinsapayments.commons.exceptions.PointException;
 
+@ExtendWith(MockitoExtension.class)
 class PointServiceTest {
 
+    @Mock
     private PointReader pointReader;
-    private PointStore pointStore;
-    private PointService pointService;
 
-    @BeforeEach
-    void setUp() {
-        pointReader = Mockito.mock(PointReader.class);
-        pointStore = Mockito.mock(PointStore.class);
-        pointService = new PointService(pointReader, pointStore);
-    }
+    @Mock
+    private PointStore pointStore;
+
+    @InjectMocks
+    private PointService pointService;
 
     @Test
     void 포인트_적립_테스트() {
@@ -31,11 +36,22 @@ class PointServiceTest {
 
         when(pointReader.findPointPolicy(1L)).thenReturn(pointPolicy);
         when(pointReader.findPointBalanceByUserId(1L)).thenReturn(pointBalance);
+        when(pointStore.savePoint(any(Point.class))).thenAnswer(invocation -> {
+            Point savedPoint = invocation.getArgument(0);
+            setPrivateField(savedPoint, "id", 1L);
+            return savedPoint;
+        });
         pointService.savePoint(point);
 
-        Mockito.verify(pointStore).savePoint(point);
-        Mockito.verify(pointStore).savePointBalance(pointBalance);
-        Mockito.verify(pointStore).savePointLedger(Mockito.any(PointLedger.class));
+        verify(pointStore).savePoint(point);
+        verify(pointStore).savePointBalance(pointBalance);
+        verify(pointStore).savePointLedger(any(PointLedger.class));
+    }
+
+    private void setPrivateField(Object object, String fieldName, Object value) throws Exception {
+        Field field = object.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(object, value);
     }
 
     @Test
@@ -45,7 +61,7 @@ class PointServiceTest {
 
         when(pointReader.findPointPolicy(1L)).thenReturn(pointPolicy);
 
-        assertThrows(IllegalArgumentException.class, () -> pointService.savePoint(point));
+        assertThrows(PointException.class, () -> pointService.savePoint(point));
     }
 
     @Test
@@ -55,19 +71,22 @@ class PointServiceTest {
 
         when(pointReader.findPointPolicy(1L)).thenReturn(pointPolicy);
 
-        assertThrows(IllegalArgumentException.class, () -> pointService.savePoint(point));
+        assertThrows(PointException.class, () -> pointService.savePoint(point));
     }
 
     @Test
     void 최대_보유_가능_포인트_초과_실패_테스트() {
         PointPolicy pointPolicy = new PointPolicy(1L, 1000L, 10L, 100L);
-        Point point = new Point(1L, 500L, false);
-        PointBalance pointBalance = new PointBalance(1L, 800L);
+        Point point = new Point(1L, 50L, false);
+        PointBalance pointBalance = new PointBalance(1L, 980L);
 
         when(pointReader.findPointPolicy(1L)).thenReturn(pointPolicy);
         when(pointReader.findPointBalanceByUserId(1L)).thenReturn(pointBalance);
 
-        assertThrows(IllegalArgumentException.class, () -> pointService.savePoint(point));
+        assertThrows(PointException.class, () -> pointService.savePoint(point));
+
+        verify(pointReader).findPointPolicy(1L);
+        verify(pointReader).findPointBalanceByUserId(1L);
     }
 
     @Test
@@ -79,9 +98,9 @@ class PointServiceTest {
         when(pointReader.findPointBalanceByUserId(1L)).thenReturn(pointBalance);
         pointService.cancelPoint(1L);
 
-        Mockito.verify(pointStore).savePoint(point);
-        Mockito.verify(pointStore).savePointBalance(pointBalance);
-        Mockito.verify(pointStore).savePointLedger(Mockito.any(PointLedger.class));
+        verify(pointStore).savePoint(point);
+        verify(pointStore).savePointBalance(pointBalance);
+        verify(pointStore).savePointLedger(any(PointLedger.class));
     }
 
     @Test
@@ -101,9 +120,9 @@ class PointServiceTest {
         when(pointReader.findAllPointByUserId(1L)).thenReturn(userPoints);
         pointService.usePoint(1L, 1L, 50L);
 
-        Mockito.verify(pointStore).saveAllPoint(userPoints);
-        Mockito.verify(pointStore).saveAllPointLedger(Mockito.anyList());
-        Mockito.verify(pointStore).savePointBalance(pointBalance);
+        verify(pointStore).saveAllPoint(userPoints);
+        verify(pointStore).saveAllPointLedger(anyList());
+        verify(pointStore).savePointBalance(pointBalance);
     }
 
     @Test
@@ -129,9 +148,9 @@ class PointServiceTest {
         when(pointReader.findPoint(1L)).thenReturn(point);
         pointService.cancelUsedPoint(1L, 1L, 50L);
 
-        Mockito.verify(pointStore).saveAllPoint(Mockito.anyList());
-        Mockito.verify(pointStore).saveAllPointLedger(Mockito.anyList());
-        Mockito.verify(pointStore).savePointBalance(pointBalance);
+        verify(pointStore).saveAllPoint(anyList());
+        verify(pointStore).saveAllPointLedger(anyList());
+        verify(pointStore).savePointBalance(pointBalance);
     }
 
     @Test
@@ -144,5 +163,4 @@ class PointServiceTest {
 
         assertThrows(PointException.class, () -> pointService.cancelUsedPoint(1L, 1L, 100L));
     }
-
 }

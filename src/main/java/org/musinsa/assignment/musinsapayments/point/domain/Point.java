@@ -17,6 +17,7 @@ import org.musinsa.assignment.musinsapayments.commons.model.BaseEntity;
 @Table(name = "point")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Point extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -60,6 +61,5 @@ public class Point extends BaseEntity {
         this.isManually = isManually;
         this.remainAmount = amount;
     }
-
 
 }
