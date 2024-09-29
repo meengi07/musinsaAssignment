@@ -14,9 +14,11 @@
 ```
 git clone https://github.com/meengi07/musinsaAssignment.git
 
+cd musinsaAssignment/
+
 ./gradlew clean build
 
-java -jar build/libs/musinsaAssignment-0.0.1-SNAPSHOT.jar
+java -jar build/libs/musinsaPayments-0.0.1-SNAPSHOT.jar
 ```
 
 ## 3. API 명세
